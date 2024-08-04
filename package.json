@@ -4,7 +4,7 @@
   "github": "https://github.com/pukueh/home",
   "home": "https://pukueh.top",
   "private": true,
-  "version": "4.1.4",
+  "version": "1.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite --host",
