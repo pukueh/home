@@ -216,7 +216,7 @@ const getWeatherData = async () => {
   console.log("getWeatherData called. txKey:", txKey ? "Present" : "Missing", "mainKey:", mainKey, "mainCity:", mainCity);
   try {
     
-    // 1. 优先尝试腾讯 (如果有 Key)
+    // 1. 优先尝试腾讯 (如果有 Key) - 腾讯IP定位通常更准
     if (txKey) {
        try {
         await useTXWeather();
@@ -226,7 +226,7 @@ const getWeatherData = async () => {
        }
     }
     
-    // 2. 尝试高德 (通过 Proxy)
+    // 2. 尝试高德 (如果有 Key)
     if (mainKey) {
        try {
         await useGDWeather();
@@ -236,7 +236,7 @@ const getWeatherData = async () => {
        }
     }
     
-    // 3. 尝试 OpenMeteo (Free)
+    // 3. 尝试 OpenMeteo (完全免费，基于 FreeIPAPI)
     console.log("Attempting Fallback: OpenMeteo");
     try {
         await useOpenMeteo();
@@ -246,23 +246,11 @@ const getWeatherData = async () => {
         console.error("OpenMeteo 失败:", error);
     }
     
-    // 4. 回退到教书先生 (最后的希望)
-    /*
-    console.log("Attempting Fallback: Teacher API");
-    try {
-      await useBackupWeather();
-      console.log("Teacher API success");
-      return;
-    } catch (error) {
-      console.error("教书先生天气接口获取失败:", error);
-    }
-    */
-    
     // 所有接口都失败
-    throw "所有天气接口均失败";
+    throw "所有天气接口均失败，请检查网络或 API Key 配置";
   } catch (error) {
     console.error("天气信息获取失败:", error);
-    onError("天气信息获取失败");
+    onError("天气信息获取失败: " + error);
   }
 };
 

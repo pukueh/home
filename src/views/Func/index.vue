@@ -62,6 +62,9 @@ onBeforeUnmount(() => {
 <style lang="scss" scoped>
 .function {
   height: 165px;
+  &.mobile {
+    height: auto;
+  }
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -91,7 +94,11 @@ onBeforeUnmount(() => {
       }
       @media (max-width: 910px) {
         &:nth-of-type(1) {
-          display: none;
+          // 修改为显示，但宽度设为100%
+          display: block; 
+          width: 100%;
+          padding: 0 !important;
+          margin-bottom: 20px;
         }
         &:nth-of-type(2) {
           padding: 0 !important;

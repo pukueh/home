@@ -52,7 +52,7 @@ export const mainStore = defineStore("main", {
       this.innerWidth = value;
       if (value >= 720) {
         this.mobileOpenState = false;
-        this.mobileFuncState = false;
+        // this.mobileFuncState = false; // Allow CSS to handle layout
       }
     },
     // 更改播放状态
