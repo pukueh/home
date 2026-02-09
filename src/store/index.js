@@ -16,6 +16,8 @@ export const mainStore = defineStore("main", {
       mobileOpenState: false, // 移动端开启状态
       mobileFuncState: false, // 移动端功能区开启状态
       setOpenState: false, // 设置页面开启状态
+      gameOpenState: false, // 游戏中心开启状态
+      activeGameId: "snake", // 当前选中的游戏
       playerState: false, // 当前播放状态
       playerTitle: null, // 当前播放歌曲名
       playerArtist: null, // 当前播放歌手名

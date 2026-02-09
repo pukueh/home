@@ -1,16 +1,16 @@
 [
   {
-    "icon": "Blog",
+    "icon": "PenNib",
     "name": "博客",
     "link": "https://blog.pukueh.top/"
   },
   {
-    "icon": "Blog",
+    "icon": "FileCode",
     "name": "静态站",
     "link": "https://pukueh.github.io"
   },
   {
-    "icon": "Book",
+    "icon": "UserCircle",
     "name": "关于",
     "link": "https://blog.pukueh.top/about"
   }

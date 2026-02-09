@@ -1,14 +1,14 @@
 <template>
-  <div v-if="siteLinks[0]" class="links">
+  <div v-if="projectLinks[0]" class="links">
     <div class="line">
       <Icon size="20">
-        <Link />
+        <LaptopCode />
       </Icon>
-      <span class="title">网站列表</span>
+      <span class="title">项目列表</span>
     </div>
     <!-- 网站列表 -->
     <Swiper
-      v-if="siteLinks[0]"
+      v-if="projectLinks[0]"
       :modules="[Pagination, Mousewheel]"
       :slides-per-view="1"
       :space-between="40"
@@ -19,7 +19,7 @@
       }"
       :mousewheel="true"
     >
-      <SwiperSlide v-for="site in siteLinksList" :key="site">
+      <SwiperSlide v-for="site in projectLinksList" :key="site">
         <el-row class="link-all" :gutter="20">
           <el-col v-for="(item, index) in site" :span="8" :key="item">
             <div
@@ -28,7 +28,8 @@
               @click="jumpLink(item)"
             >
               <Icon size="26">
-                <component :is="siteIcon[item.icon]" />
+                <!-- Use dynamic component for icons, defaulting to LaptopCode if not found -->
+                <component :is="siteIcon[item.icon] || LaptopCode" />
               </Icon>
               <span class="name text-hidden">{{ item.name }}</span>
             </div>
@@ -43,19 +44,19 @@
 <script setup>
 import { Icon } from "@vicons/utils";
 // 可前往 https://www.xicons.org 自行挑选并在此处引入
-import { Link, Blog, CompactDisc, Cloud, Compass, Book, Fire, LaptopCode, PenNib, FileCode, UserCircle } from "@vicons/fa"; // 注意使用正确的类别
+import { Link, Blog, CompactDisc, Cloud, Compass, Book, Fire, LaptopCode, PiggyBank, ChartLine, Plane } from "@vicons/fa"; // 注意使用正确的类别
 import { mainStore } from "@/store";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import { Pagination, Mousewheel } from "swiper/modules";
-import siteLinks from "@/assets/siteLinks.json";
+import projectLinks from "@/assets/projectLinks.json";
 
 const store = mainStore();
 
 // 计算网站链接
-const siteLinksList = computed(() => {
+const projectLinksList = computed(() => {
   const result = [];
-  for (let i = 0; i < siteLinks.length; i += 6) {
-    const subArr = siteLinks.slice(i, i + 6);
+  for (let i = 0; i < projectLinks.length; i += 6) {
+    const subArr = projectLinks.slice(i, i + 6);
     result.push(subArr);
   }
   return result;
@@ -70,22 +71,19 @@ const siteIcon = {
   Book,
   Fire,
   LaptopCode,
-  PenNib,
-  FileCode,
-  UserCircle
+  Link,
+  PiggyBank,
+  ChartLine,
+  Plane
 };
 
 // 链接跳转
 const jumpLink = (data) => {
-  if (data.name === "音乐" && store.musicClick) {
-    if (typeof $openList === "function") $openList();
-  } else {
-    window.open(data.link, "_blank");
-  }
+  window.open(data.link, "_blank");
 };
 
 onMounted(() => {
-  console.log(siteLinks);
+  console.log(projectLinks);
 });
 </script>
 
@@ -135,7 +133,7 @@ onMounted(() => {
     }
   }
   .link-all {
-    height: auto;
+    height: 220px;
     .item {
       height: 100px;
       width: 100%;

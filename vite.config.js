@@ -92,8 +92,45 @@ export default ({ mode }) =>
       viteCompression(),
     ],
     server: {
-      port: "3000",
+      port: "3001",
       open: true,
+      proxy: {
+        "/api/oioweather": {
+          target: "https://api.oioweb.cn",
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api\/oioweather/, ""),
+        },
+        "/api/meting": {
+          target: "https://api.i-meto.com/meting",
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api\/meting/, ""),
+        },
+        "/api/amap": {
+          target: "https://restapi.amap.com",
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api\/amap/, ""),
+        },
+        "/api/qqmap": {
+          target: "https://apis.map.qq.com",
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api\/qqmap/, ""),
+        },
+        "/api/freeip": {
+          target: "https://freeipapi.com",
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api\/freeip/, ""),
+        },
+        "/api/openmeteo": {
+          target: "https://api.open-meteo.com",
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api\/openmeteo/, ""),
+        },
+        "/api/arxiv": {
+          target: "https://export.arxiv.org",
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api\/arxiv/, ""),
+        },
+      },
     },
     resolve: {
       alias: [
@@ -118,5 +155,14 @@ export default ({ mode }) =>
           pure_funcs: ["console.log"],
         },
       },
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            'vendor': ['vue', 'pinia'],
+            'element-plus': ['element-plus'],
+            'icons': ['@icon-park/vue-next', '@vicons/utils', '@vicons/fa'],
+          }
+        }
+      }
     },
   });

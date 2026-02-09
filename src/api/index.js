@@ -1,5 +1,8 @@
-// import axios from "axios";
+
 import fetchJsonp from "fetch-jsonp";
+
+const OTHER_WEATHER_API =
+  import.meta.env.VITE_WEATHER_OTHER_API || "https://api.oioweb.cn/api/weather/GetWeather";
 
 /**
  * 音乐播放器
@@ -40,36 +43,68 @@ export const getPlayerList = async (server, type, id) => {
 };
 
 /**
- * 一言
- */
-
-// 获取一言数据
-export const getHitokoto = async () => {
-  const res = await fetch("https://v1.hitokoto.cn");
-  return await res.json();
-};
-
-/**
  * 天气
  */
 
+// 获取用户 IP
+const getUserIP = async () => {
+  try {
+    const res = await fetch("https://api.ipify.org?format=json");
+    const data = await res.json();
+    return data.ip;
+  } catch (error) {
+    console.error("获取 IP 失败:", error);
+    return null;
+  }
+};
+
 // 获取高德地理位置信息
 export const getAdcode = async (key) => {
-  const res = await fetch(`https://restapi.amap.com/v3/ip?key=${key}`);
+  const ip = await getUserIP();
+  const url = ip
+    ? `/api/amap/v3/ip?key=${key}&ip=${ip}`
+    : `/api/amap/v3/ip?key=${key}`;
+  const res = await fetch(url);
   return await res.json();
 };
 
 // 获取高德地理天气信息
 export const getWeather = async (key, city) => {
   const res = await fetch(
-    `https://restapi.amap.com/v3/weather/weatherInfo?key=${key}&city=${city}`,
+    `/api/amap/v3/weather/weatherInfo?key=${key}&city=${city}`,
   );
+  return await res.json();
+};
+
+// 获取腾讯地理位置信息
+export const getTXAdcode = async (key) => {
+  const res = await fetch(`/api/qqmap/ws/location/v1/ip?key=${key}&output=json`);
+  return await res.json();
+};
+
+// 获取腾讯地理天气信息
+export const getTXWeather = async (key, city) => {
+  const res = await fetch(
+    `/api/qqmap/wisdom/weather/current?key=${key}&city=${city}`,
+  );
+  return await res.json();
+};
+
+// 获取 FreeIPAPI (无 Key IP 定位)
+export const getFreeIp = async () => {
+  const res = await fetch("/api/freeip/api/json");
+  return await res.json();
+};
+
+// 获取 OpenMeteo 天气 (无 Key)
+export const getOpenMeteo = async (lat, lon) => {
+  const res = await fetch(`/api/openmeteo/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code,wind_speed_10m,wind_direction_10m&timezone=auto`);
   return await res.json();
 };
 
 // 获取教书先生天气 API
 // https://api.oioweb.cn/doc/weather/GetWeather
 export const getOtherWeather = async () => {
-  const res = await fetch("https://api.oioweb.cn/api/weather/GetWeather");
+  const res = await fetch(OTHER_WEATHER_API);
   return await res.json();
 };

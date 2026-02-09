@@ -9,6 +9,8 @@
     <Func />
     <!-- 网站链接 -->
     <Link />
+    <!-- 项目列表 -->
+    <ProjectLinks />
   </div>
 </template>
 
@@ -16,6 +18,7 @@
 import { mainStore } from "@/store";
 import Func from "@/views/Func/index.vue";
 import Link from "@/components/Links.vue";
+import ProjectLinks from "@/components/ProjectLinks.vue";
 const store = mainStore();
 
 // 站点链接
@@ -36,6 +39,7 @@ const siteUrl = computed(() => {
   // flex: 1 0 0%;
   width: 50%;
   margin-left: 0.75rem;
+  transform: translateY(80px);
   .logo {
     width: 100%;
     font-family: "Pacifico-Regular";
@@ -67,5 +71,6 @@ const siteUrl = computed(() => {
       display: none;
     }
   }
+
 }
 </style>

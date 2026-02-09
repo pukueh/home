@@ -17,9 +17,13 @@ const store = mainStore();
   // flex: 1 0 0%;
   width: 50%;
   margin-right: 10px;
-  transform: translateY(20px);
+  transform: translateY(0);
   &.hidden {
     display: none;
+  }
+  @media (max-width: 720px) {
+    margin-right: 0;
+    width: 100%;
   }
   @media (max-width: 720px) {
     margin-right: 0;
