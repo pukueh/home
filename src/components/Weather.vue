@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-import { getAdcode, getWeather, getOtherWeather, getTXAdcode, getTXWeather, getFreeIp, getOpenMeteo } from "@/api";
+import { getAdcode, getWeather, getOtherWeather, getTXAdcode, getTXWeather, getFreeIp, getOpenMeteo, get7TimerWeather } from "@/api";
 import { Error } from "@icon-park/vue-next";
 
 // 高德开发者 Key
@@ -44,7 +44,6 @@ const weatherData = reactive({
   },
 });
 
-// OpenMeteo WMO Code Mapping
 const weatherMap = {
   0: "晴",
   1: "多云", 2: "多云", 3: "阴",
@@ -58,6 +57,25 @@ const weatherMap = {
   80: "阵雨", 81: "阵雨", 82: "阵雨",
   85: "阵雪", 86: "阵雪",
   95: "雷雨", 96: "雷雨", 99: "雷雨"
+};
+
+// 7Timer weather code mapping
+const sevenTimerWeatherMap = {
+  "clear": "晴",
+  "pcloudy": "少云",
+  "mcloudy": "多云",
+  "cloudy": "阴",
+  "humid": "潮湿",
+  "lightrain": "小雨",
+  "oshower": "阵雨",
+  "ishower": "间歇阵雨",
+  "lightsnow": "小雪",
+  "rain": "雨",
+  "snow": "雪",
+  "rainsnow": "雨夹雪",
+  "ts": "雷雨",
+  "tsrain": "雷阵雨",
+  "windy": "大风"
 };
 
 const getWindDirection = (deg) => {
@@ -175,6 +193,52 @@ const useGDWeather = async () => {
   };
 };
 
+// 使用 7Timer (完全免费)
+const use7TimerWeather = async () => {
+  console.log("正在使用 7Timer (Free)");
+  // 1. 获取 Lat/Lon
+  const ipData = await getFreeIp();
+  console.log("FreeIPAPI result:", ipData);
+  
+  if (!ipData || !ipData.latitude) {
+      throw "7Timer: 无法获取位置";
+  }
+  
+  weatherData.adCode = {
+      city: ipData.cityName || ipData.regionName || "未知地区",
+      adcode: ipData.zipCode,
+  };
+  
+  // 2. 获取天气
+  const wData = await get7TimerWeather(ipData.latitude, ipData.longitude);
+  console.log("7Timer result:", wData);
+  
+  if (!wData || !wData.dataseries || wData.dataseries.length === 0) {
+      throw "7Timer: 天气数据获取失败";
+  }
+  
+  const current = wData.dataseries[0];
+  const wText = sevenTimerWeatherMap[current.weather] || current.weather || "未知";
+  
+  // 7Timer returns temp2m as object with min/max
+  const temp = typeof current.temp2m === 'object' 
+    ? getTemperature(current.temp2m.min, current.temp2m.max)
+    : current.temp2m;
+  
+  // 7Timer wind direction is in degrees (e.g., "N", "NE", etc.)
+  const windDirMap = {
+    "N": "北", "NE": "东北", "E": "东", "SE": "东南",
+    "S": "南", "SW": "西南", "W": "西", "NW": "西北"
+  };
+  
+  weatherData.weather = {
+      weather: wText,
+      temperature: temp,
+      winddirection: String(windDirMap[current.wind10m?.direction] || current.wind10m?.direction || "未知"),
+      windpower: String(current.wind10m?.speed || "未知"),
+  };
+}
+
 // 使用 OpenMeteo (完全免费)
 const useOpenMeteo = async () => {
   console.log("正在使用 OpenMeteo (Free)");
@@ -236,7 +300,17 @@ const getWeatherData = async () => {
        }
     }
     
-    // 3. 尝试 OpenMeteo (完全免费，基于 FreeIPAPI)
+    // 3. 尝试 7Timer (完全免费，基于 FreeIPAPI)
+    console.log("Attempting Fallback: 7Timer");
+    try {
+        await use7TimerWeather();
+        console.log("7Timer success");
+        return;
+    } catch(error) {
+        console.error("7Timer 失败:", error);
+    }
+    
+    // 4. 尝试 OpenMeteo (完全免费，基于 FreeIPAPI)
     console.log("Attempting Fallback: OpenMeteo");
     try {
         await useOpenMeteo();

@@ -2,15 +2,13 @@
   <div
     class="ai-briefing cards"
     v-show="!store.musicOpenState"
-    @mouseenter="openMusicShow = true"
-    @mouseleave="openMusicShow = false"
     @click.stop
   >
     <!-- 打开音乐面板 -->
     <Transition name="el-fade-in-linear">
       <div
         class="open-music"
-        v-show="(openMusicShow || isMobile) && store.musicIsOk"
+        v-show="store.musicIsOk"
         @click="store.musicOpenState = true"
       >
         <music-menu theme="filled" size="18" fill="#efefef" />
@@ -111,19 +109,14 @@ import { mainStore } from "@/store";
 
 const store = mainStore();
 
-const openMusicShow = ref(false);
 const showModal = ref(false);
 const activeTab = ref('github');
 const loading = ref(true);
 const githubData = ref([]);
 const arxivData = ref([]);
-const isMobile = ref(false); // Add isMobile state
 
 onMounted(() => {
   refresh();
-  if (window.innerWidth < 720) {
-    isMobile.value = true;
-  }
 });
 const formatNumber = (num) => {
   if (num >= 1000) {
@@ -206,6 +199,9 @@ onMounted(() => {
     padding: 4px 0;
     border-radius: 8px 8px 0 0;
     cursor: pointer;
+    opacity: 0; // Hidden by default on desktop
+    transition: opacity 0.3s;
+    
     .i-icon {
       width: 18px;
       height: 18px;
@@ -216,9 +212,12 @@ onMounted(() => {
       font-size: 0.9rem;
     }
     @media (max-width: 720px) {
-      display: flex !important; // Force display on mobile
-      background: #00000060;
+      display: none !important; // Hidden on mobile per user request
     }
+  }
+
+  &:hover .open-music {
+    opacity: 1; // Visible on hover (Desktop)
   }
   
   .preview {

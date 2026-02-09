@@ -155,6 +155,11 @@ onBeforeUnmount(() => {
       justify-content: center;
       align-items: center;
     }
+    @media (max-width: 720px) {
+      .all {
+        flex-direction: column;
+      }
+    }
     .more {
       position: fixed;
       top: 0;
@@ -254,7 +259,7 @@ onBeforeUnmount(() => {
       width: 391px;
     }
     @media (min-height: 721px) {
-      overflow-y: hidden;
+      overflow-y: auto;
     }
   }
 }

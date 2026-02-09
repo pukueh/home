@@ -130,6 +130,11 @@ export default ({ mode }) =>
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/api\/arxiv/, ""),
         },
+        "/api/7timer": {
+          target: "https://www.7timer.info",
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api\/7timer/, ""),
+        },
       },
     },
     resolve: {

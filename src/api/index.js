@@ -108,3 +108,10 @@ export const getOtherWeather = async () => {
   const res = await fetch(OTHER_WEATHER_API);
   return await res.json();
 };
+
+// 获取 7Timer 天气 (完全免费，无需 Key)
+// https://www.7timer.info/doc.php
+export const get7TimerWeather = async (lat, lon) => {
+  const res = await fetch(`/api/7timer/bin/api.pl?lon=${lon}&lat=${lat}&product=civil&output=json`);
+  return await res.json();
+};

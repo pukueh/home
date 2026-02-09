@@ -1,5 +1,5 @@
 <template>
-  <div v-if="projectLinks[0]" class="links">
+  <div class="links">
     <div class="line">
       <Icon size="20">
         <LaptopCode />
@@ -89,6 +89,8 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .links {
+  min-height: 200px; /* Force height check */
+  border: 1px solid transparent; /* Debug border */
   .line {
     margin: 2rem 0.25rem 1rem;
     font-size: 1.1rem;
@@ -106,6 +108,7 @@ onMounted(() => {
     width: calc(100% + 20px);
     padding: 5px 10px 0;
     z-index: 0;
+    min-height: 140px; /* Ensure height for slides */
     .swiper-slide {
       height: 100%;
     }

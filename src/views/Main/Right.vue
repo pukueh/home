@@ -56,6 +56,11 @@ const siteUrl = computed(() => {
     @media (min-width: 721px) {
       display: none;
     }
+    @media (max-width: 720px) {
+      position: static; // No longer fixed
+      font-size: 1.5rem; // Smaller on mobile
+      margin-bottom: 10px;
+    }
     @media (max-height: 720px) {
       width: calc(100% + 6px);
       top: 43.26px; // 721px * 0.06
@@ -67,6 +72,10 @@ const siteUrl = computed(() => {
   @media (max-width: 720px) {
     margin-left: 0;
     width: 100%;
+    padding-top: 10px; // Minimal padding since logo is inline now
+    padding-bottom: 60px; // Ensure content clears the footer
+    height: 100%;
+    overflow-y: auto;
     &.hidden {
       display: none;
     }

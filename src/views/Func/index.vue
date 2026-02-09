@@ -5,12 +5,12 @@
       <el-col :span="12">
         <div class="left">
           <AIBriefing />
-          <Music v-if="playerHasId" />
+          <Music v-if="playerHasId" class="mobile-hidden" />
         </div>
       </el-col>
       <el-col :span="12">
         <div class="right cards">
-          <div class="time">
+          <div class="time mobile-hidden">
             <div class="date">
               <span>{{ currentTime.year }}&nbsp;年&nbsp;</span>
               <span>{{ currentTime.month }}&nbsp;月&nbsp;</span>
@@ -21,7 +21,7 @@
               <span> {{ currentTime.hour }}:{{ currentTime.minute }}:{{ currentTime.second }}</span>
             </div>
           </div>
-          <Weather />
+          <Weather class="mobile-hidden" />
         </div>
       </el-col>
     </el-row>
@@ -65,6 +65,9 @@ onBeforeUnmount(() => {
   &.mobile {
     height: auto;
   }
+  @media (max-width: 910px) {
+    height: auto !important;
+  }
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -79,6 +82,12 @@ onBeforeUnmount(() => {
           display: none;
         }
       }
+    }
+  }
+
+  :deep(.mobile-hidden) {
+    @media (max-width: 910px) {
+      display: none !important;
     }
   }
   .el-row {
@@ -97,6 +106,8 @@ onBeforeUnmount(() => {
           // 修改为显示，但宽度设为100%
           display: block; 
           width: 100%;
+          max-width: none;
+          flex: 0 0 100%;
           padding: 0 !important;
           margin-bottom: 20px;
         }
@@ -114,12 +125,16 @@ onBeforeUnmount(() => {
       height: 100%;
     }
     .right {
+      height: 100%;
       padding: 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
       animation: fade 0.5s;
+      
+
+
       .time {
         font-size: 1.1rem;
         text-align: center;
