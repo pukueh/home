@@ -163,9 +163,11 @@ export default ({ mode }) =>
       rollupOptions: {
         output: {
           manualChunks: {
-            'vendor': ['vue', 'pinia'],
+            'vendor': ['vue', 'pinia', 'pinia-plugin-persistedstate', 'dayjs'],
             'element-plus': ['element-plus'],
             'icons': ['@icon-park/vue-next', '@vicons/utils', '@vicons/fa'],
+            'aplayer': ['@worstone/vue-aplayer', 'aplayer'],
+            'swiper': ['swiper'],
           }
         }
       }

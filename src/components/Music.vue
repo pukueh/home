@@ -79,7 +79,7 @@ import {
   VolumeSmall,
   VolumeNotice,
 } from "@icon-park/vue-next";
-import Player from "@/components/Player.vue";
+const Player = defineAsyncComponent(() => import("@/components/Player.vue"));
 import { mainStore } from "@/store";
 const store = mainStore();
 
