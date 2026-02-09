@@ -23,6 +23,15 @@ jobs:
         with:
           version: 8
 
+      - name: Create .env from .env.example
+        run: |
+          if [ -f .env.example ]; then
+            cp .env.example .env
+            echo "Created .env from .env.example"
+          else
+            echo ".env.example not found, skipping"
+          fi
+
       - name: Install dependencies
         run: pnpm install
 
