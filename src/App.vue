@@ -171,12 +171,15 @@ onBeforeUnmount(() => {
     }
   }
   .menu {
-    position: absolute;
+    position: fixed;
     display: flex;
     justify-content: center;
     align-items: center;
-    top: 84%;
-    left: calc(50% - 28px);
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    top: auto !important; // Override any top
+    z-index: 100;
     width: 56px;
     height: 34px;
     background: rgb(0 0 0 / 20%);

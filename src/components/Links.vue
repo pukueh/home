@@ -177,9 +177,6 @@ onMounted(() => {
         }
       }
     }
-    @media (max-width: 720px) {
-      height: 180px;
-    }
   }
 }
 </style>

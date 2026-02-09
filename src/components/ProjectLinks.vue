@@ -133,7 +133,7 @@ onMounted(() => {
     }
   }
   .link-all {
-    height: 220px;
+    height: auto;
     .item {
       height: 100px;
       width: 100%;
@@ -174,9 +174,6 @@ onMounted(() => {
           margin-top: 8px;
         }
       }
-    }
-    @media (max-width: 720px) {
-      height: 180px;
     }
   }
 }

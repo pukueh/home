@@ -10,7 +10,7 @@
     <Transition name="el-fade-in-linear">
       <div
         class="open-music"
-        v-show="openMusicShow && store.musicIsOk"
+        v-show="(openMusicShow || isMobile) && store.musicIsOk"
         @click="store.musicOpenState = true"
       >
         <music-menu theme="filled" size="18" fill="#efefef" />
@@ -117,8 +117,14 @@ const activeTab = ref('github');
 const loading = ref(true);
 const githubData = ref([]);
 const arxivData = ref([]);
+const isMobile = ref(false); // Add isMobile state
 
-// 格式化数字
+onMounted(() => {
+  refresh();
+  if (window.innerWidth < 720) {
+    isMobile.value = true;
+  }
+});
 const formatNumber = (num) => {
   if (num >= 1000) {
     return (num / 1000).toFixed(1) + 'k';
@@ -208,6 +214,10 @@ onMounted(() => {
     }
     span {
       font-size: 0.9rem;
+    }
+    @media (max-width: 720px) {
+      display: flex !important; // Force display on mobile
+      background: #00000060;
     }
   }
   

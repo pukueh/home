@@ -246,6 +246,19 @@ const getWeatherData = async () => {
         console.error("OpenMeteo 失败:", error);
     }
     
+    // 4. 最终回退：如果配置了固定城市，强制使用该城市
+    if (mainCity) {
+      console.log("所有自动定位失败，尝试使用配置的固定城市:", mainCity);
+      try {
+        // 重置 adCode 以便重新尝试 useGDWeather / useTXWeather (带 mainCity 参数)
+        //由于 useGDWeather 内部优先判断 mainCity，直接调用即可
+        await useGDWeather(); 
+        return;
+      } catch (e) {
+         console.error("固定城市获取失败:", e);
+      }
+    }
+    
     // 所有接口都失败
     throw "所有天气接口均失败，请检查网络或 API Key 配置";
   } catch (error) {
