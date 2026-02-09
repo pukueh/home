@@ -50,6 +50,64 @@
 5. 构建完成后，在 Actions 页面对应的 workflow 运行记录下方，可以下载 `dist` 压缩包 (Artifacts)。
 6. 将解压后的 `dist` 文件夹内容上传至您的服务器即可。
 
+## 💻 部署指南 (Nginx)
+
+由于本项目使用了多个 API 代理（天气、音乐、AI简报），在生产环境（如宝塔面板）部署时，**必须**配置 Nginx 反向代理，否则相关功能将失效。
+
+### 1. 文件部署
+将构建好的 `dist` 目录内的 **所有文件** 上传至网站根目录（例如 `/www/wwwroot/your-domain.com/`）。
+⚠️ **注意**：如果不解压或套了层 `dist` 文件夹，请务必移动文件到根目录。
+
+### 2. Nginx 配置 (关键)
+在网站的 Nginx 配置文件中（`server { ... }` 块内），添加以下代理规则：
+
+```nginx
+    # 1. 天气接口
+    location /api/oioweather/ {
+        proxy_pass https://api.oioweb.cn/;
+        proxy_ssl_server_name on;
+    }
+
+    # 2. 音乐接口 (Meting)
+    location /api/meting/ {
+        proxy_pass https://api.i-meto.com/meting/;
+        proxy_ssl_server_name on;
+    }
+
+    # 3. 高德地图接口 (IP/天气)
+    location /api/amap/ {
+        proxy_pass https://restapi.amap.com/;
+        proxy_ssl_server_name on;
+    }
+
+    # 4. 腾讯地图接口
+    location /api/qqmap/ {
+        proxy_pass https://apis.map.qq.com/;
+        proxy_ssl_server_name on;
+    }
+
+    # 5. FreeIP 接口
+    location /api/freeip/ {
+        proxy_pass https://freeipapi.com/;
+        proxy_ssl_server_name on;
+    }
+
+    # 6. OpenMeteo 天气
+    location /api/openmeteo/ {
+        proxy_pass https://api.open-meteo.com/;
+        proxy_ssl_server_name on;
+    }
+
+    # 7. ArXiv 论文接口 (AI简报用)
+    location /api/arxiv/ {
+        proxy_pass https://export.arxiv.org/;
+        proxy_ssl_server_name on;
+    }
+```
+
+### 3. 重启 Nginx
+保存配置并重载 Nginx 即可生效。
+
 ## 🚀 快速开始
 
 ### 环境要求
